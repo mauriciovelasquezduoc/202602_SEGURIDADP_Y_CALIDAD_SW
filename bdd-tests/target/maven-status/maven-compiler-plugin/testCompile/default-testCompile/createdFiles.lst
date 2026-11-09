@@ -1,0 +1,10 @@
+cl/duoc/lab/bdd/steps/LoginSteps.class
+cl/duoc/lab/bdd/steps/CartSteps.class
+cl/duoc/lab/bdd/config/TestConfig.class
+cl/duoc/lab/bdd/support/Ui.class
+cl/duoc/lab/bdd/RunCucumberTest.class
+cl/duoc/lab/bdd/steps/SearchSteps.class
+cl/duoc/lab/bdd/steps/RegisterSteps.class
+cl/duoc/lab/bdd/steps/NavigationSteps.class
+cl/duoc/lab/bdd/hooks/Hooks.class
+cl/duoc/lab/bdd/hooks/ZapHook.class

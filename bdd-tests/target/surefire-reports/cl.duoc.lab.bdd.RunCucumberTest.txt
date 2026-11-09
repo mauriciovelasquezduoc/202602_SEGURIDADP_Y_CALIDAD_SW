@@ -1,0 +1,53 @@
+-------------------------------------------------------------------------------
+Test set: cl.duoc.lab.bdd.RunCucumberTest
+-------------------------------------------------------------------------------
+Tests run: 11, Failures: 1, Errors: 3, Skipped: 0, Time elapsed: 604.3 s <<< FAILURE! -- in cl.duoc.lab.bdd.RunCucumberTest
+Buscar productos por nombre.La búsqueda con coincidencias lista productos relevantes -- Time elapsed: 30.62 s <<< ERROR!
+org.openqa.selenium.TimeoutException: 
+Expected condition failed: waiting for visibility of element located by By.cssSelector: #searchQuery .search-container input (tried for 20 second(s) with 500 milliseconds interval)
+Build info: version: '4.27.0', revision: 'd6e718d134'
+System info: os.name: 'Linux', os.arch: 'amd64', os.version: '7.0.14-linuxkit', java.version: '17.0.20.1'
+Driver info: org.openqa.selenium.remote.RemoteWebDriver
+Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 156.0.8078.79, chrome: {chromedriverVersion: 156.0.8078.79 (a21ce95c24ce..., userDataDir: /tmp/org.chromium.Chromium....}, fedcm:accounts: true, goog:chromeOptions: {debuggerAddress: localhost:42863}, goog:processID: 8042, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: linux, proxy: Proxy(manual, http=http://z..., se:bidiEnabled: false, se:cdp: ws://172.21.0.4:4444/sessio..., se:cdpVersion: 156.0.8078.79, se:containerName: 52a553143323, se:deleteSessionOnUi: true, se:downloadsEnabled: true, se:noVncPort: 7900, se:vnc: ws://172.21.0.4:4444/sessio..., se:vncEnabled: true, se:vncLocalAddress: ws://172.21.0.4:7900, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:cmtgKey: true, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
+Session ID: 84c005f19b45983f55ac2569d235dd94
+	at org.openqa.selenium.support.ui.WebDriverWait.timeoutException(WebDriverWait.java:84)
+	at org.openqa.selenium.support.ui.FluentWait.until(FluentWait.java:228)
+	at cl.duoc.lab.bdd.support.Ui.visible(Ui.java:140)
+	at cl.duoc.lab.bdd.support.Ui.buscar(Ui.java:197)
+	at cl.duoc.lab.bdd.steps.SearchSteps.busca(SearchSteps.java:19)
+	at ✽.busca "apple"(classpath:features/uc02_busqueda.feature:10)
+
+Búsqueda sin resultados.La búsqueda sin coincidencias no lista productos -- Time elapsed: 29.81 s <<< ERROR!
+org.openqa.selenium.TimeoutException: 
+Expected condition failed: waiting for visibility of element located by By.cssSelector: #searchQuery .search-container input (tried for 20 second(s) with 500 milliseconds interval)
+Build info: version: '4.27.0', revision: 'd6e718d134'
+System info: os.name: 'Linux', os.arch: 'amd64', os.version: '7.0.14-linuxkit', java.version: '17.0.20.1'
+Driver info: org.openqa.selenium.remote.RemoteWebDriver
+Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 156.0.8078.79, chrome: {chromedriverVersion: 156.0.8078.79 (a21ce95c24ce..., userDataDir: /tmp/org.chromium.Chromium....}, fedcm:accounts: true, goog:chromeOptions: {debuggerAddress: localhost:35921}, goog:processID: 8252, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: linux, proxy: Proxy(manual, http=http://z..., se:bidiEnabled: false, se:cdp: ws://172.21.0.4:4444/sessio..., se:cdpVersion: 156.0.8078.79, se:containerName: 52a553143323, se:deleteSessionOnUi: true, se:downloadsEnabled: true, se:noVncPort: 7900, se:vnc: ws://172.21.0.4:4444/sessio..., se:vncEnabled: true, se:vncLocalAddress: ws://172.21.0.4:7900, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:cmtgKey: true, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
+Session ID: dda70c6d254efa04f4d756e505026ec4
+	at org.openqa.selenium.support.ui.WebDriverWait.timeoutException(WebDriverWait.java:84)
+	at org.openqa.selenium.support.ui.FluentWait.until(FluentWait.java:228)
+	at cl.duoc.lab.bdd.support.Ui.visible(Ui.java:140)
+	at cl.duoc.lab.bdd.support.Ui.buscar(Ui.java:197)
+	at cl.duoc.lab.bdd.steps.SearchSteps.busca(SearchSteps.java:19)
+	at ✽.busca "zzqqxxyy"(classpath:features/uc03_busqueda_vacia.feature:10)
+
+Gestionar cantidades del carrito.Cambiar la cantidad recalcula el subtotal -- Time elapsed: 14.97 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: El total no se recalculó como precio unitario * 2 ==> expected: <1.99> but was: <3.98>
+	at cl.duoc.lab.bdd.steps.CartSteps.elSubtotalCorresponde(CartSteps.java:98)
+	at ✽.el subtotal corresponde al precio por la cantidad(classpath:features/uc08_carrito_cantidad.feature:13)
+
+XSS reflejado en el buscador.El payload de XSS se ejecuta y despliega una alerta -- Time elapsed: 29.58 s <<< ERROR!
+org.openqa.selenium.TimeoutException: 
+Expected condition failed: waiting for visibility of element located by By.cssSelector: #searchQuery .search-container input (tried for 20 second(s) with 500 milliseconds interval)
+Build info: version: '4.27.0', revision: 'd6e718d134'
+System info: os.name: 'Linux', os.arch: 'amd64', os.version: '7.0.14-linuxkit', java.version: '17.0.20.1'
+Driver info: org.openqa.selenium.remote.RemoteWebDriver
+Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 156.0.8078.79, chrome: {chromedriverVersion: 156.0.8078.79 (a21ce95c24ce..., userDataDir: /tmp/org.chromium.Chromium....}, fedcm:accounts: true, goog:chromeOptions: {debuggerAddress: localhost:46793}, goog:processID: 9900, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: linux, proxy: Proxy(manual, http=http://z..., se:bidiEnabled: false, se:cdp: ws://172.21.0.4:4444/sessio..., se:cdpVersion: 156.0.8078.79, se:containerName: 52a553143323, se:deleteSessionOnUi: true, se:downloadsEnabled: true, se:noVncPort: 7900, se:vnc: ws://172.21.0.4:4444/sessio..., se:vncEnabled: true, se:vncLocalAddress: ws://172.21.0.4:7900, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:cmtgKey: true, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
+Session ID: 2a6e7a4cf775d8eb3539a59e76568073
+	at org.openqa.selenium.support.ui.WebDriverWait.timeoutException(WebDriverWait.java:84)
+	at org.openqa.selenium.support.ui.FluentWait.until(FluentWait.java:228)
+	at cl.duoc.lab.bdd.support.Ui.visible(Ui.java:140)
+	at cl.duoc.lab.bdd.steps.SecuritySteps.inyectaPayload(SecuritySteps.java:75)
+	at ✽.inyecta la carga útil(classpath:features/uc10_xss_busqueda.feature:13)
+

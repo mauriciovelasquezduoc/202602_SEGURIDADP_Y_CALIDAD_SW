@@ -1,0 +1,120 @@
+# ============================================================
+#  LAB S14 - BDD (Cucumber/Gherkin) + Selenium + OWASP ZAP
+#  Sobre OWASP Juice Shop (aplicacion con fallos intencionales)
+#
+#  Levantar todo:   docker compose up -d
+#  Ver estados:     docker compose ps
+#  Derribar todo:   docker compose down -v
+# ============================================================
+
+services:
+
+  # ------------------------------------------------------------
+  # 1) Aplicacion objetivo: OWASP Juice Shop
+  #    http://localhost:3000
+  # ------------------------------------------------------------
+  juice-shop:
+    image: bkimminich/juice-shop:latest
+    container_name: lab-juice-shop
+    ports:
+      # exposed solo para que el alumno pueda explorar la app manualmente
+      - "3000:3000"
+    networks:
+      - labnet
+    healthcheck:
+      test: ["CMD", "/nodejs/bin/node", "-e", "fetch('http://localhost:3000/').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  # ------------------------------------------------------------
+  # 2) OWASP ZAP en modo daemon (proxy + API en el mismo puerto)
+  #    El navegador de Selenium navegara TRAVES de este proxy.
+  #    ZAP escanea pasivamente todo el trafico que generan los tests,
+  #    y al final se lanza un Active Scan contra Juice Shop.
+  # ------------------------------------------------------------
+  zap:
+    image: ghcr.io/zaproxy/zaproxy:stable
+    container_name: lab-zap
+    user: root
+    command: >
+      zap.sh -daemon
+      -host 0.0.0.0
+      -port 8080
+      -config api.disablekey=false
+      -config api.key=zap-key-lab-s14
+      -config database.persistsession=true
+      -config start.max=true
+      -dir /zap/sessions
+    ports:
+      # exposed solo para que el alumno pueda abrir el dashboard/API manualmente
+      - "8090:8080"
+    volumes:
+      - zap-sessions:/zap/sessions
+    networks:
+      - labnet
+    healthcheck:
+      test: ["CMD-SHELL", "python3 -c \"import socket;socket.create_connection(('127.0.0.1',8080),3)\" || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+
+  # ------------------------------------------------------------
+  # 3) Navegador headless manejado por Selenium WebDriver
+  #    (los tests Java se conectan a este nodo via RemoteWebDriver)
+  # ------------------------------------------------------------
+  selenium:
+    image: selenium/standalone-chromium:latest
+    container_name: lab-selenium
+    shm_size: 2gb
+    environment:
+      - SE_NODE_SESSION_TIMEOUT=180
+    ports:
+      # exposed solo para depuracion manual (VNC en 7900)
+      - "7900:7900"
+    networks:
+      - labnet
+    depends_on:
+      - zap
+
+  # ------------------------------------------------------------
+  # 4) Runner de pruebas Java (Cucumber + Selenium + ZAP Client API)
+  #    Monta el proyecto Maven y la carpeta de evidencias.
+  # ------------------------------------------------------------
+  tests:
+    image: maven:3.9-eclipse-temurin-17
+    container_name: lab-tests
+    working_dir: /app
+    environment:
+      # --- configuracion leida por los tests Java ---
+      BASE_URL: "http://juice-shop:3000"
+      SELENIUM_URL: "http://selenium:4444/wd/hub"
+      ZAP_PROXY: "zap:8080"
+      ZAP_API_URL: "http://zap:8080"
+      ZAP_API_KEY: "zap-key-lab-s14"
+      EVIDENCIAS_DIR: "/evidencias"
+      # pon ZAP_ACTIVE_SCAN=true para que se lance el Active Scan al terminar
+      ZAP_ACTIVE_SCAN: "true"
+    volumes:
+      - ./bdd-tests:/app:ro
+      # para que los reportes de Cucumber (target/) sobrevivan al contenedor
+      - ./bdd-tests/target:/app/target
+      - ./evidencias:/evidencias
+    networks:
+      - labnet
+    depends_on:
+      juice-shop:
+        condition: service_healthy
+      zap:
+        condition: service_healthy
+      selenium:
+        condition: service_started
+    command: mvn -q test -Devidencia.dir=/evidencias
+
+networks:
+  labnet:
+    driver: bridge
+
+volumes:
+  zap-sessions:
